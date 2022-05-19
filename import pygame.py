@@ -1,11 +1,7 @@
-from logging import FileHandler
 import pygame
 import os
 
 FPS = 60
-da,kjfad,FileHandler
-
-
 
 pygame.init()
 SCREENWIDTH = 900
