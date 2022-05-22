@@ -6,20 +6,23 @@ FPS = 60
 PLAYER_VELOCITY = 5
 
 pygame.init()
-SCREENWIDTH = 900
-SCREENHEIGHT = 500
+SCREENWIDTH = 960
+SCREENHEIGHT = 540
 WIN  = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-PLAYER_WIDTH, PLAYER_HEIGHT = 80, 80
+PLAYER_WIDTH, PLAYER_HEIGHT = 50, 50
 
 player_sprite_image = pygame.image.load(
     os.path.join('assets', 'player_sprite.png'))
 enemy_sprite_image = pygame.image.load(
     os.path.join('assets', 'zombie_sprite.png'))
+background = pygame.transform.scale(pygame.image.load(
+    os.path.join('assets', 'background.png')), (SCREENWIDTH, SCREENHEIGHT))
 
-player_sprite = pygame.transform.scale(player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+player_sprite = pygame.transform.scale(
+    player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
 def draw_window(player):
-    WIN.fill((255, 255, 255))
+    WIN.blit(background, (0, 0))
     WIN.blit(player_sprite, (player.x, player.y))
     pygame.display.update()
 
@@ -30,7 +33,7 @@ def player_movement(keys_pressed, player):
         player.y += PLAYER_VELOCITY
 
 def main():
-    player = pygame.Rect(20, 250, PLAYER_WIDTH, PLAYER_HEIGHT)
+    player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
     clock = pygame.time.Clock()
     run=True
     while run:
