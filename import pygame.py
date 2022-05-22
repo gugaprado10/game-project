@@ -12,9 +12,9 @@ WIN  = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 PLAYER_WIDTH, PLAYER_HEIGHT = 80, 80
 
 player_sprite_image = pygame.image.load(
-    r"C:\Users\Giba\Documents\GitHub\game-project\assets\player_sprite.png")
+    os.path.join('assets', 'player_sprite.png'))
 enemy_sprite_image = pygame.image.load(
-    r"C:\Users\Giba\Documents\GitHub\game-project\assets\zombie_sprite.png")
+    os.path.join('assets', 'zombie_sprite.png'))
 
 player_sprite = pygame.transform.scale(player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
