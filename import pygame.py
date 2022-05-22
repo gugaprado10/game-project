@@ -24,9 +24,9 @@ def draw_window(player):
     pygame.display.update()
 
 def player_movement(keys_pressed, player):
-    if keys_pressed[pygame.K_UP]:
+    if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 0:
         player.y -= PLAYER_VELOCITY
-    if keys_pressed[pygame.K_DOWN]:
+    if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
         player.y += PLAYER_VELOCITY
 
 def main():
