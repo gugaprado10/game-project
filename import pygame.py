@@ -31,7 +31,7 @@ def draw_window(player, player_bullets):
     WIN.blit(background, (0, 0))
     WIN.blit(player_sprite, (player.x, player.y))
     for bullets in player_bullets:
-        pygame.draw.rect(WIN, RED, bullets)
+        pygame.draw.rect(WIN, RED, bullet)
 
     pygame.display.update()
 
@@ -79,9 +79,7 @@ def main():
         if event.type == ZOMBIE_HIT:
             zombie_health -=1
 
-    if player_health <= 0:
-        winner_text = "You lost"
-    if zombie_health <=0:
+    
         #zombiedesaparecer
 
 
