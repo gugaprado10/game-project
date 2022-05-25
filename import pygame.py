@@ -4,6 +4,10 @@ import os
 
 FPS = 60
 PLAYER_VELOCITY = 5
+BULLET_VEL = 7
+MAX_BULLET = 10000000
+RED = (255,0,0)
+
 
 pygame.init()
 SCREENWIDTH = 960
@@ -21,19 +25,37 @@ background = pygame.transform.scale(pygame.image.load(
 player_sprite = pygame.transform.scale(
     player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
-def draw_window(player):
+def draw_window(player, player_bullets):
     WIN.blit(background, (0, 0))
     WIN.blit(player_sprite, (player.x, player.y))
+    for bullets in player_bullets:
+        pygame.draw.rect(WIN, RED, bullets)
+
     pygame.display.update()
 
 def player_movement(keys_pressed, player):
-    if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 0:
+    if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 270:
         player.y -= PLAYER_VELOCITY
     if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
         player.y += PLAYER_VELOCITY
 
+def handle_bullets (player_bullets, player):
+    for bullet in player_bullets:
+        bullet.x += BULLET_VEL
+        if bullet.x > SCREENWIDTH:
+            player_bullets.remove(bullet)
+
+
+
+
+
 def main():
     player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
+
+    player_bullets = []
+    zombie_health = 1
+    player_health = 1
+
     clock = pygame.time.Clock()
     run=True
     while run:
@@ -41,10 +63,26 @@ def main():
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 run = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and len(player_bullets) < MAX_BULLET:
+                    bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
+                    player_bullets.append(bullet)
+        
+    
+    
+
+
+
+
+
         
         keys_pressed = pygame.key.get_pressed()
         player_movement(keys_pressed, player)
-        draw_window(player)
+
+        handle_bullets(player_bullets, player)
+
+        draw_window(player, player_bullets)
     pygame.quit()
 
 if __name__ == "__main__":
