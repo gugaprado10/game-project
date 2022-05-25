@@ -59,7 +59,7 @@ def handle_bullets (player_bullets, player, zombie):
 
 def main():
     player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
-    zombie = pygame.Rect(900, random.randrange(270, 540), ZOMBIE_WIDTH, ZOMBIE_HEIGHT)
+    zombie = pygame.Rect(900, random.randrange(270, 500), ZOMBIE_WIDTH, ZOMBIE_HEIGHT)
 
     player_bullets = []
     zombie_health = 1
