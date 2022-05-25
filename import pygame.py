@@ -1,6 +1,7 @@
 from logging import FileHandler
 import pygame
 import os
+<<<<<<< Updated upstream
 import random
 
 FPS = 60
@@ -59,6 +60,38 @@ def main():
     zombie_health = 1
     player_health = 3
 
+=======
+
+FPS = 60
+PLAYER_VELOCITY = 5
+
+pygame.init()
+SCREENWIDTH = 900
+SCREENHEIGHT = 500
+WIN  = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+PLAYER_WIDTH, PLAYER_HEIGHT = 80, 80
+
+player_sprite_image = pygame.image.load(
+    r"C:\Users\Giba\Documents\GitHub\game-project\assets\player_sprite.png")
+enemy_sprite_image = pygame.image.load(
+    r"C:\Users\Giba\Documents\GitHub\game-project\assets\zombie_sprite.png")
+
+player_sprite = pygame.transform.scale(player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+
+def draw_window(player):
+    WIN.fill((255, 255, 255))
+    WIN.blit(player_sprite, (player.x, player.y))
+    pygame.display.update()
+
+def player_movement(keys_pressed, player):
+    if keys_pressed[pygame.K_UP]:
+        player.y -= PLAYER_VELOCITY
+    if keys_pressed[pygame.K_DOWN]:
+        player.y += PLAYER_VELOCITY
+
+def main():
+    player = pygame.Rect(20, 250, PLAYER_WIDTH, PLAYER_HEIGHT)
+>>>>>>> Stashed changes
     clock = pygame.time.Clock()
     run=True
     while run:
@@ -66,6 +99,7 @@ def main():
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
                 run = False
+<<<<<<< Updated upstream
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -86,6 +120,12 @@ def main():
         handle_bullets(player_bullets, player)
 
         draw_window(player, player_bullets, zombie)
+=======
+        
+        keys_pressed = pygame.key.get_pressed()
+        player_movement(keys_pressed, player)
+        draw_window(player)
+>>>>>>> Stashed changes
     pygame.quit()
 
 if __name__ == "__main__":
