@@ -43,7 +43,7 @@ def draw_window(player, player_bullets, zombie):
     pygame.display.update()
 
 
-    def player_movement(keys_pressed, player):
+def player_movement(keys_pressed, player):
     if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 270:
         player.y -= PLAYER_VELOCITY
     if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
