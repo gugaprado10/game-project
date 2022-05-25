@@ -5,9 +5,7 @@ import os
 FPS = 60
 PLAYER_VELOCITY = 5
 BULLET_VEL = 7
-MAX_BULLET = 10000000
 RED = (255,0,0)
-
 
 pygame.init()
 SCREENWIDTH = 960
@@ -45,10 +43,6 @@ def handle_bullets (player_bullets, player):
         if bullet.x > SCREENWIDTH:
             player_bullets.remove(bullet)
 
-
-
-
-
 def main():
     player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
 
@@ -65,17 +59,9 @@ def main():
                 run = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and len(player_bullets) < MAX_BULLET:
+                if event.key == pygame.K_SPACE:
                     bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
                     player_bullets.append(bullet)
-        
-    
-    
-
-
-
-
-
         
         keys_pressed = pygame.key.get_pressed()
         player_movement(keys_pressed, player)
