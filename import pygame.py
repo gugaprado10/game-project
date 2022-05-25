@@ -78,7 +78,7 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and len(player_bullets) <= MAX_BULLETS:
-                    bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
+                    bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 + 2, 10,5)
                     player_bullets.append(bullet)
 
         zombie.x -= ZOMBIE_VELOCITY
