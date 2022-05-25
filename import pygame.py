@@ -9,6 +9,8 @@ ZOMBIE_VELOCITY = 5
 BULLET_VEL = 7
 RED = (255,0,0)
 
+ZOMBIE_HIT = pygame.USEREVENT + 1
+
 pygame.init()
 SCREENWIDTH = 960
 SCREENHEIGHT = 540
@@ -44,10 +46,15 @@ def player_movement(keys_pressed, player):
     if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
         player.y += PLAYER_VELOCITY
 
-def handle_bullets (player_bullets, player):
+def handle_bullets (player_bullets, player, zombie):
     for bullet in player_bullets:
         bullet.x += BULLET_VEL
-        if bullet.x > SCREENWIDTH:
+        if zombie.colliderect(bullet):
+            pygame.event.post(pygame.event.Event(ZOMBIE_HIT))
+            player_bullets.remove(bullet)
+            zombie.x = 900
+            zombie.y = random.randrange(270, 500)
+        elif bullet.x > SCREENWIDTH:
             player_bullets.remove(bullet)
 
 def main():
@@ -78,7 +85,7 @@ def main():
         
         if zombie.x <= 20:
             zombie.x = 900
-            zombie.y = random.randrange(270, 540)
+            zombie.y = random.randrange(270, 500)
             player_health -= 1
 
         if player_health == 0:
@@ -86,7 +93,7 @@ def main():
         keys_pressed = pygame.key.get_pressed()
 
         player_movement(keys_pressed, player)
-        handle_bullets(player_bullets, player)
+        handle_bullets(player_bullets, player, zombie)
         draw_window(player, player_bullets, zombie)
 
         
