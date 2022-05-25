@@ -7,6 +7,7 @@ FPS = 60
 PLAYER_VELOCITY = 5
 ZOMBIE_VELOCITY = 5
 BULLET_VEL = 7
+MAX_BULLETS = 7
 RED = (255,0,0)
 
 ZOMBIE_HIT = pygame.USEREVENT + 1
@@ -76,7 +77,7 @@ def main():
                 run = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and len(player_bullets) <= MAX_BULLETS:
                     bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
                     player_bullets.append(bullet)
 
