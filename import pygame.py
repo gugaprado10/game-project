@@ -8,8 +8,6 @@ BULLET_VEL = 7
 MAX_BULLET = 5
 RED = (255,0,0)
 
-PLAYER_HIT = pygame.USEREVENT + 1 #playernãoéatingidone?
-ZOMBIE_HIT = pygame.USEREVENT + 2
 
 pygame.init()
 SCREENWIDTH = 960
@@ -31,7 +29,7 @@ def draw_window(player, player_bullets):
     WIN.blit(background, (0, 0))
     WIN.blit(player_sprite, (player.x, player.y))
     for bullets in player_bullets:
-        pygame.draw.rect(WIN, RED, bullet)
+        pygame.draw.rect(WIN, RED, bullets)
 
     pygame.display.update()
 
@@ -44,10 +42,7 @@ def player_movement(keys_pressed, player):
 def handle_bullets (player_bullets, player):
     for bullet in player_bullets:
         bullet.x += BULLET_VEL
-        if zombie.colliderect(bullet):
-            pygame.event.post(pygame.event.Event(ZOMBIE_HIT))
-            player_bullets.remove(bullet)
-        elif bullet.x > SCREENWIDTH:
+        if bullet.x > SCREENWIDTH:
             player_bullets.remove(bullet)
 
 
@@ -73,14 +68,9 @@ def main():
                 if event.key == pygame.K_SPACE and len(player_bullets) < MAX_BULLET:
                     bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
                     player_bullets.append(bullet)
-        if event.type == PLAYER_HIT:
-            player_health -=1
-
-        if event.type == ZOMBIE_HIT:
-            zombie_health -=1
-
+        
     
-        #zombiedesaparecer
+    
 
 
 
