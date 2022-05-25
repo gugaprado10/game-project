@@ -7,14 +7,15 @@ FPS = 60
 PLAYER_VELOCITY = 5
 ZOMBIE_VELOCITY = 5
 BULLET_VEL = 7
-RED = (255,0,0)
+RED = (255, 0, 0)
 
 pygame.init()
 SCREENWIDTH = 960
 SCREENHEIGHT = 540
-WIN  = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+WIN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 PLAYER_WIDTH, PLAYER_HEIGHT = 50, 50
 ZOMBIE_WIDTH, ZOMBIE_HEIGHT = 40, 40
+CLOWN_WIDTH, CLOWN_HEİGHT = 40, 40
 
 player_sprite_image = pygame.image.load(
     os.path.join('assets', 'player_sprite.png'))
@@ -22,11 +23,15 @@ enemy_sprite_image = pygame.image.load(
     os.path.join('assets', 'zombie.png'))
 background = pygame.transform.scale(pygame.image.load(
     os.path.join('assets', 'background.png')), (SCREENWIDTH, SCREENHEIGHT))
+clown_sprite_image = pygame.image.load(
+    os.path.join('assets', 'clown.png'))
 
 player_sprite = pygame.transform.scale(
     player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 zombie_sprite = pygame.transform.scale(
     enemy_sprite_image, (ZOMBIE_WIDTH, ZOMBIE_HEIGHT))
+clown_sprite = pygame.transform.scale(clown_sprite_image, (CLOWN_WIDTH, CLOWN_HEİGHT))
+
 
 def draw_window(player, player_bullets, zombie):
     WIN.blit(background, (0, 0))
@@ -37,9 +42,8 @@ def draw_window(player, player_bullets, zombie):
 
     pygame.display.update()
 
-    
 
-def player_movement(keys_pressed, player):
+    def player_movement(keys_pressed, player):
     if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 270:
         player.y -= PLAYER_VELOCITY
     if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
