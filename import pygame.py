@@ -15,7 +15,7 @@ SCREENHEIGHT = 540
 WIN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
 PLAYER_WIDTH, PLAYER_HEIGHT = 50, 50
 ZOMBIE_WIDTH, ZOMBIE_HEIGHT = 40, 40
-CLOWN_WIDTH, CLOWN_HEİGHT = 40, 40
+CLOWN_WIDTH, CLOWN_HEIGHT = 40, 40
 
 player_sprite_image = pygame.image.load(
     os.path.join('assets', 'player_sprite.png'))
@@ -30,15 +30,16 @@ player_sprite = pygame.transform.scale(
     player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
 zombie_sprite = pygame.transform.scale(
     enemy_sprite_image, (ZOMBIE_WIDTH, ZOMBIE_HEIGHT))
-clown_sprite = pygame.transform.scale(clown_sprite_image, (CLOWN_WIDTH, CLOWN_HEİGHT))
+clown_sprite = pygame.transform.scale(clown_sprite_image, (CLOWN_WIDTH, CLOWN_HEIGHT))
 
 
-def draw_window(player, player_bullets, zombie):
+def draw_window(player, player_bullets, zombie, clown):
     WIN.blit(background, (0, 0))
     WIN.blit(player_sprite, (player.x, player.y))
     for bullets in player_bullets:
         pygame.draw.rect(WIN, RED, bullets)
     WIN.blit(zombie_sprite, (zombie.x, zombie.y))
+    WIN.blit(clown_sprite, (clown.x, clown.y))
 
     pygame.display.update()
 
@@ -89,7 +90,7 @@ def main():
 
         handle_bullets(player_bullets, player)
 
-        draw_window(player, player_bullets, zombie)
+        draw_window(player, player_bullets, zombie,)
     pygame.quit()
 
 if __name__ == "__main__":
