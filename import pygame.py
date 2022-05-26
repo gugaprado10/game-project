@@ -6,6 +6,7 @@ import random
 FPS = 60
 PLAYER_VELOCITY = 5
 ZOMBIE_VELOCITY = 5
+CLOWN_VELOCITY =5
 BULLET_VEL = 7
 RED = (255, 0, 0)
 
@@ -59,17 +60,19 @@ def handle_bullets (player_bullets, player):
 def main():
     player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
     zombie = pygame.Rect(900, random.randrange(270, 540), ZOMBIE_WIDTH, ZOMBIE_HEIGHT)
+    clown =pygame.Rect(900, random.randrange(270, 540), CLOWN_WIDTH, CLOWN_HEIGHT)
 
     player_bullets = []
     zombie_health = 1
     player_health = 3
+    clown_health = 2
 
     clock = pygame.time.Clock()
     run=True
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
-            if event.type==pygame.QUIT:
+            if event.type == pygame.QUIT:
                 run = False
 
             if event.type == pygame.KEYDOWN:
@@ -78,9 +81,15 @@ def main():
                     player_bullets.append(bullet)
 
         zombie.x -= ZOMBIE_VELOCITY
+        clown.x -= CLOWN_VELOCITY
         if zombie.x <= 20:
             zombie.x = 900
             zombie.y = random.randrange(270, 540)
+            player_health -= 1
+
+        if clown.x <= 20:
+            clown.x = 900
+            clown.y = random.randrange(270, 540)
             player_health -= 1
 
         if player_health == 0:
@@ -90,7 +99,7 @@ def main():
 
         handle_bullets(player_bullets, player)
 
-        draw_window(player, player_bullets, zombie,)
+        draw_window(player, player_bullets, zombie, clown)
     pygame.quit()
 
 if __name__ == "__main__":
