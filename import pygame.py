@@ -2,6 +2,7 @@ from logging import FileHandler
 import pygame
 import os
 import random
+import math
 
 FPS = 60
 PLAYER_VELOCITY = 5
@@ -9,7 +10,7 @@ ZOMBIE_VELOCITY = 5
 CLOWN_VELOCITY =5
 BULLET_VEL = 7
 RED = (255, 0, 0)
-
+SCORE = 0
 pygame.init()
 SCREENWIDTH = 960
 SCREENHEIGHT = 540
@@ -56,6 +57,27 @@ def handle_bullets (player_bullets, player):
         bullet.x += BULLET_VEL
         if bullet.x > SCREENWIDTH:
             player_bullets.remove(bullet)
+
+
+
+def collision(zombieX, zombieY, bulletX, bulletY):
+    distance = math.sqrt((math.pow(zombieX-bulletX, 2)) + (math.pow(zombieY-bulletY, 2)))
+    if distance < 27:
+        return True
+    else:
+        return False
+
+
+
+
+  #collision
+if collision:
+    bulletY = 480
+    bullet_state = 'ready'
+    SCORE += 1
+    print(SCORE)
+
+
 
 def main():
     player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
