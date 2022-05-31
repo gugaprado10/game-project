@@ -1,128 +1,185 @@
-from logging import FileHandler
 import pygame
 import os
 import random
-import math
 
-FPS = 60
-PLAYER_VELOCITY = 5
-ZOMBIE_VELOCITY = 5
-CLOWN_VELOCITY =5
-BULLET_VEL = 7
-RED = (255, 0, 0)
-SCORE = 0
+# Variables
+FPS = 50
+SCREEN_WIDTH = 960
+SCREEN_HEIGHT = 540
+MAX_BULLETS = 5
+MAX_ZOMBIES = 5
+
+# Initialization
 pygame.init()
-SCREENWIDTH = 960
-SCREENHEIGHT = 540
-WIN = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-PLAYER_WIDTH, PLAYER_HEIGHT = 50, 50
-ZOMBIE_WIDTH, ZOMBIE_HEIGHT = 40, 40
-CLOWN_WIDTH, CLOWN_HEIGHT = 40, 40
+window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Zombie Shooter")
+clock = pygame.time.Clock()
 
-player_sprite_image = pygame.image.load(
-    os.path.join('assets', 'player_sprite.png'))
-enemy_sprite_image = pygame.image.load(
-    os.path.join('assets', 'zombie.png'))
+# Assets
 background = pygame.transform.scale(pygame.image.load(
-    os.path.join('assets', 'background.png')), (SCREENWIDTH, SCREENHEIGHT))
-clown_sprite_image = pygame.image.load(
-    os.path.join('assets', 'clown.png'))
-
-player_sprite = pygame.transform.scale(
-    player_sprite_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
-zombie_sprite = pygame.transform.scale(
-    enemy_sprite_image, (ZOMBIE_WIDTH, ZOMBIE_HEIGHT))
-clown_sprite = pygame.transform.scale(clown_sprite_image, (CLOWN_WIDTH, CLOWN_HEIGHT))
+    'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+shooting_frames = [pygame.image.load(
+    f"assets/player/shoot{i}.png") for i in range(0, 5)]
+right_frames = [pygame.image.load(
+    f'assets/player/run{i}.png') for i in range(0, 6)]
+left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
+zombie_sprite = pygame.image.load("assets/zombie.png")
 
 
-def draw_window(player, player_bullets, zombie, clown):
-    WIN.blit(background, (0, 0))
-    WIN.blit(player_sprite, (player.x, player.y))
-    for bullets in player_bullets:
-        pygame.draw.rect(WIN, RED, bullets)
-    WIN.blit(zombie_sprite, (zombie.x, zombie.y))
-    WIN.blit(clown_sprite, (clown.x, clown.y))
+class Player(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.vel = 10
+        self.left = False
+        self.right = True
+        self.walk_count = 0
+        self.is_shooting = False
+        self.shoot_count = 0
 
+    def draw(self, window):
+        if self.walk_count + 1 >= len(right_frames)*3:
+            self.walk_count = 0
+
+        if self.shoot_count + 1 >= len(shooting_frames)*3:
+            self.shoot_count = 0
+            self.is_shooting = False
+
+        if not(self.is_shooting):
+            if self.left:
+                window.blit(left_frames[self.walk_count//3], (self.x, self.y))
+                self.walk_count += 1
+            elif self.right:
+                window.blit(right_frames[self.walk_count//3], (self.x, self.y))
+                self.walk_count += 1
+        else:
+            window.blit(shooting_frames[self.shoot_count//3], (self.x, self.y))
+            self.shoot_count += 1
+
+        self.move()
+
+    def move(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_SPACE]:
+            self.shoot()
+        if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH//3:
+            self.right = True
+            self.left = False
+            self.x += self.vel
+        elif keys[pygame.K_LEFT] and self.x - self.vel > 10:
+            self.right = False
+            self.left = True
+            self.x -= self.vel
+        if keys[pygame.K_UP] and self.y - self.vel > 270:
+            self.y -= self.vel
+        elif keys[pygame.K_DOWN] and self.y + self.vel + self.rect().height < SCREEN_HEIGHT:
+            self.y += self.vel
+
+    def shoot(self):
+        self.is_shooting = True
+        if len(bullets) <= MAX_BULLETS and self.shoot_count == 0:
+            bullet = Projectile(player.x + player.rect().width,
+                                player.y + player.rect().height//2 + 2, 10, 5)
+            bullets.append(bullet)
+
+    def rect(self):
+        return right_frames[0].get_rect(topleft=(self.x, self.y))
+
+
+class Projectile(object):
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.vel = 15
+        self.color = (255, 0, 0)
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, window):
+        pygame.draw.rect(window, self.color, self.rect)
+        self.move()
+
+    def move(self):
+        self.x += self.vel
+        self.rect.x = self.x
+        if self.x > SCREEN_WIDTH:
+            bullets.remove(self)
+
+
+class Enemy(object):
+    def __init__(self, sprite):
+        self.vel = 5
+        self.has_passed = False
+        self.sprite = sprite
+        self.rect = sprite.get_rect(topleft=(
+            random.randrange(900, 1500),
+            random.randrange(270, 500)))
+
+    def draw(self, window):
+        window.blit(self.sprite, self.rect)
+        self.move()
+
+    def move(self):
+        self.rect.x -= self.vel
+        if self.rect.x <= 20:
+            self.has_passed = True
+            self.spawn()
+
+    def spawn(self):
+        self.rect = self.sprite.get_rect(topleft=(SCREEN_WIDTH, random.randrange(
+            270, 500)))
+
+
+def redraw_window():
+    window.blit(background, (0, 0))
+    score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
+    lives_text = font.render('Lives: ' + str(player_health), 1, (255, 0, 0))
+    window.blit(score_text, (20, 10))
+    window.blit(lives_text, (20, 50))
+
+    player.draw(window)
+    for zombie in zombies:
+        zombie.draw(window)
+    for bullet in bullets:
+        bullet.draw(window)
     pygame.display.update()
 
 
-def player_movement(keys_pressed, player):
-    if keys_pressed[pygame.K_UP] and player.y - PLAYER_VELOCITY > 270:
-        player.y -= PLAYER_VELOCITY
-    if keys_pressed[pygame.K_DOWN] and player.y + PLAYER_VELOCITY + player.height < SCREENHEIGHT:
-        player.y += PLAYER_VELOCITY
-
-def handle_bullets (player_bullets, player):
-    for bullet in player_bullets:
-        bullet.x += BULLET_VEL
-        if bullet.x > SCREENWIDTH:
-            player_bullets.remove(bullet)
+player = Player(50, 270)
+bullets = []
+zombies = []
+score = 0
+player_health = 5
+font = pygame.font.SysFont('comicsans', 30, True)
 
 
-
-def collision(zombieX, zombieY, bulletX, bulletY):
-    distance = math.sqrt((math.pow(zombieX-bulletX, 2)) + (math.pow(zombieY-bulletY, 2)))
-    if distance < 27:
-        return True
-    else:
-        return False
-
-
-
-
-  #collision
-if collision:
-    bulletY = 480
-    bullet_state = 'ready'
-    SCORE += 1
-    print(SCORE)
-
-
-
-def main():
-    player = pygame.Rect(20, 270, PLAYER_WIDTH, PLAYER_HEIGHT)
-    zombie = pygame.Rect(900, random.randrange(270, 540), ZOMBIE_WIDTH, ZOMBIE_HEIGHT)
-    clown =pygame.Rect(900, random.randrange(270, 540), CLOWN_WIDTH, CLOWN_HEIGHT)
-
-    player_bullets = []
-    zombie_health = 1
-    player_health = 3
-    clown_health = 2
-
-    clock = pygame.time.Clock()
-    run=True
-    while run:
-        clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    bullet = pygame.Rect(player.x + player.width, player.y + player.height//2 - 2, 10,5)
-                    player_bullets.append(bullet)
-
-        zombie.x -= ZOMBIE_VELOCITY
-        clown.x -= CLOWN_VELOCITY
-        if zombie.x <= 20:
-            zombie.x = 900
-            zombie.y = random.randrange(270, 540)
-            player_health -= 1
-
-        if clown.x <= 20:
-            clown.x = 900
-            clown.y = random.randrange(270, 540)
-            player_health -= 1
-
-        if player_health == 0:
+run = True
+while run:
+    clock.tick(FPS)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
             run = False
-        keys_pressed = pygame.key.get_pressed()
-        player_movement(keys_pressed, player)
 
-        handle_bullets(player_bullets, player)
+    while len(zombies) < MAX_ZOMBIES:
+        zombie = Enemy(zombie_sprite)
+        zombies.append(zombie)
 
-        draw_window(player, player_bullets, zombie, clown)
-    pygame.quit()
+    for zombie in zombies:
+        if zombie.has_passed:
+            player_health -= 1
+            zombie.spawn()
+            zombie.has_passed = False
+        for bullet in bullets:
+            if zombie.rect.colliderect(bullet.rect):
+                zombies.remove(zombie)
+                bullets.remove(bullet)
+                score += 10
+                if score > 250:
+                    MAX_ZOMBIES = 10
 
-if __name__ == "__main__":
-    main()
+    if player_health <= 0:
+        pass
+
+    redraw_window()
