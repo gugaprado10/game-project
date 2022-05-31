@@ -9,8 +9,7 @@ FPS = 50
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 540
 MAX_BULLETS = 5
-MAX_ZOMBIES = 5
-shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
+MAX_ZOMBIES = 3
 
 # Initialization
 pygame.init()
@@ -30,6 +29,7 @@ zombie_sprite = pygame.image.load("assets/zombie.png")
 heart_size = 30
 heart_sprite = pygame.transform.scale(
     pygame.image.load("assets/heart.png"), (heart_size, heart_size))
+shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
 
 
 class Player(object):
@@ -187,7 +187,11 @@ while run:
                 zombies.remove(zombie)
                 bullets.remove(bullet)
                 score += 10
-                if score > 250:
+                if score >= 100 and score < 250:
+                    MAX_ZOMBIES = 5
+                if score >= 250 and score < 500:
+                    MAX_ZOMBIES = 7
+                if score >= 500:
                     MAX_ZOMBIES = 10
 
     if player_health <= 0:
