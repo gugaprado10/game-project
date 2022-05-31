@@ -24,6 +24,9 @@ right_frames = [pygame.image.load(
     f'assets/player/run{i}.png') for i in range(0, 6)]
 left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
 zombie_sprite = pygame.image.load("assets/zombie.png")
+heart_size = 30
+heart_sprite = pygame.transform.scale(
+    pygame.image.load("assets/heart.png"), (heart_size, heart_size))
 
 
 class Player(object):
@@ -132,8 +135,14 @@ class Enemy(object):
             270, 500)))
 
 
+def draw_lives(window):
+    for i in range(1, player_health+1):
+        window.blit(heart_sprite, (SCREEN_WIDTH - i*(heart_size+5), 10))
+
+
 def redraw_window():
     window.blit(background, (0, 0))
+    draw_lives(window)
     score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
     lives_text = font.render('Lives: ' + str(player_health), 1, (255, 0, 0))
     window.blit(score_text, (20, 10))
