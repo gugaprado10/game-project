@@ -13,6 +13,7 @@ MAX_ZOMBIES = 3
 
 # Initialization
 pygame.init()
+pygame.mixer.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Shooter")
 clock = pygame.time.Clock()
@@ -30,6 +31,7 @@ heart_size = 30
 heart_sprite = pygame.transform.scale(
     pygame.image.load("assets/heart.png"), (heart_size, heart_size))
 shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
+damage_sound = pygame.mixer.Sound('assets/music_sound_effects/Minecraft Damage Oof Sound Effect.mp3')
 
 
 class Player(object):
@@ -182,6 +184,11 @@ while run:
             player_health -= 1
             zombie.spawn()
             zombie.has_passed = False
+            pygame.mixer.Sound.play(damage_sound)
+        if zombie.rect.colliderect(player):
+            player_health -= 1
+            zombie.spawn()
+            pygame.mixer.Sound.play(damage_sound)
         for bullet in bullets:
             if zombie.rect.colliderect(bullet.rect):
                 zombies.remove(zombie)
