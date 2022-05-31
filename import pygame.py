@@ -17,13 +17,13 @@ clock = pygame.time.Clock()
 
 # Assets
 background = pygame.transform.scale(pygame.image.load(
-    'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+    'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 shooting_frames = [pygame.image.load(
     f"assets/player/shoot{i}.png") for i in range(0, 5)]
 right_frames = [pygame.image.load(
     f'assets/player/run{i}.png') for i in range(0, 6)]
 left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
-zombie_sprite = pygame.image.load("assets/zombie.png")
+clown_sprite = pygame.image.load("assets/clown.png")
 
 
 class Player(object):
@@ -163,7 +163,7 @@ while run:
             run = False
 
     while len(zombies) < MAX_ZOMBIES:
-        zombie = Enemy(zombie_sprite)
+        zombie = Enemy(clown_sprite)
         zombies.append(zombie)
 
     for zombie in zombies:
