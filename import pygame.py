@@ -2,12 +2,15 @@ import pygame
 import os
 import random
 
+pygame.mixer.init()
+
 # Variables
 FPS = 50
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 540
 MAX_BULLETS = 5
 MAX_ZOMBIES = 5
+shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
 
 # Initialization
 pygame.init()
@@ -63,6 +66,7 @@ class Player(object):
 
         if keys[pygame.K_SPACE]:
             self.shoot()
+            pygame.mixer.Sound.play(shoot_effect)
         if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH//3:
             self.right = True
             self.left = False
