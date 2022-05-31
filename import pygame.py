@@ -148,9 +148,7 @@ def redraw_window():
     window.blit(background, (0, 0))
     draw_lives(window)
     score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
-    lives_text = font.render('Lives: ' + str(player_health), 1, (255, 0, 0))
     window.blit(score_text, (20, 10))
-    window.blit(lives_text, (20, 70))
 
     player.draw(window)
     for zombie in zombies:
