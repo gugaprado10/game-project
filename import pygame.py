@@ -180,6 +180,6 @@ while run:
                     MAX_ZOMBIES = 10
 
     if player_health <= 0:
-        pass
+        run=False
 
     redraw_window()
