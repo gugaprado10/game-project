@@ -58,7 +58,7 @@ class Player(object):
 
         if not(self.is_shooting):
             if self.left:
-                window.blit(left_frames[self.walk_count//3], (self.x, self.y))
+                window.blit(right_frames[self.walk_count//3], (self.x, self.y))
                 self.walk_count += 1
             elif self.right:
                 window.blit(right_frames[self.walk_count//3], (self.x, self.y))
