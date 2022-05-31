@@ -87,7 +87,7 @@ class Player(object):
 
     def shoot(self):
         self.is_shooting = True
-        if len(bullets) <= MAX_BULLETS and self.shoot_count == 0:
+        if len(bullets) <= MAX_BULLETS:
             bullet = Projectile(player.x + player.rect().width,
                                 player.y + player.rect().height//2 + 2, 10, 5)
             bullets.append(bullet)
