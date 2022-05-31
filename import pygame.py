@@ -137,7 +137,7 @@ def redraw_window():
     score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
     lives_text = font.render('Lives: ' + str(player_health), 1, (255, 0, 0))
     window.blit(score_text, (20, 10))
-    window.blit(lives_text, (20, 50))
+    window.blit(lives_text, (20, 70))
 
     player.draw(window)
     for zombie in zombies:
@@ -152,7 +152,7 @@ bullets = []
 zombies = []
 score = 0
 player_health = 5
-font = pygame.font.SysFont('comicsans', 30, True)
+font = pygame.font.SysFont('assets/font.ttf', 45, True)
 
 
 run = True
@@ -180,6 +180,6 @@ while run:
                     MAX_ZOMBIES = 10
 
     if player_health <= 0:
-        run=False
+        run = False
 
     redraw_window()
