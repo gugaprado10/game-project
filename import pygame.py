@@ -1,6 +1,7 @@
 import pygame
 import os
 import random
+import vlc
 
 pygame.mixer.init()
 
@@ -32,8 +33,8 @@ heart_sprite = pygame.transform.scale(
     pygame.image.load("assets/heart.png"), (heart_size, heart_size))
 shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
 damage_sound = pygame.mixer.Sound('assets/music_sound_effects/Minecraft Damage Oof Sound Effect.mp3')
-
-
+song = vlc.MediaPlayer('assets/music_sound_effects/music1.mp3')
+ 
 class Player(object):
     def __init__(self, x, y):
         self.x = x
@@ -171,6 +172,8 @@ font = pygame.font.SysFont('assets/font.ttf', 45, True)
 run = True
 while run:
     clock.tick(FPS)
+    song.play()
+    vlc.MediaPlayer.audio_set_volume(song, 80)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
