@@ -3,7 +3,6 @@ import os
 import random
 import vlc
 
-pygame.mixer.init()
 
 # Variables
 FPS = 50
@@ -31,10 +30,13 @@ zombie_sprite = pygame.image.load("assets/zombie.png")
 heart_size = 30
 heart_sprite = pygame.transform.scale(
     pygame.image.load("assets/heart.png"), (heart_size, heart_size))
-shoot_effect = pygame.mixer.Sound('assets/music_sound_effects/mixkit-short-laser-gun-shot-1670.wav')
-damage_sound = pygame.mixer.Sound('assets/music_sound_effects/Minecraft Damage Oof Sound Effect.mp3')
-song = vlc.MediaPlayer('assets/music_sound_effects/music1.mp3')
- 
+shoot_effect = pygame.mixer.Sound(
+    'assets/music_sound_effects/shootsound.mp3')
+damage_sound = pygame.mixer.Sound(
+    'assets/music_sound_effects/damagesound.mp3')
+song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
+
+
 class Player(object):
     def __init__(self, x, y):
         self.x = x
@@ -70,9 +72,6 @@ class Player(object):
     def move(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_SPACE]:
-            self.shoot()
-            pygame.mixer.Sound.play(shoot_effect)
         if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH//3:
             self.right = True
             self.left = False
@@ -177,6 +176,10 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.shoot()
+                pygame.mixer.Sound.play(shoot_effect)
 
     while len(zombies) < MAX_ZOMBIES:
         zombie = Enemy(zombie_sprite)
