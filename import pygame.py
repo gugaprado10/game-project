@@ -17,7 +17,7 @@ clock = pygame.time.Clock()
 
 # Assets
 background = pygame.transform.scale(pygame.image.load(
-    'assets/backgground2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+    'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 shooting_frames = [pygame.image.load(
     f"assets/player/shoot{i}.png") for i in range(0, 5)]
 right_frames = [pygame.image.load(
