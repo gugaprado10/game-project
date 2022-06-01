@@ -33,7 +33,7 @@ heart_sprite = pygame.transform.scale(
 shoot_effect = pygame.mixer.Sound(
     'assets/music_sound_effects/shootsound.mp3')
 damage_sound = pygame.mixer.Sound(
-    'assets/music_sound_effects/damagesound2.mp3')
+    'assets/music_sound_effects/damagesound.mp3')
 song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
 
 
