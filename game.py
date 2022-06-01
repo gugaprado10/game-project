@@ -220,6 +220,7 @@ def main_game():
             if event.type == pygame.QUIT:
                 run = False
                 song.stop()
+                secret_music.stop()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     player.shoot()
@@ -293,16 +294,18 @@ def main_game():
         if player_health <= 0:
             run = False
             song.stop()
+            secret_music.stop()
 
         # Change levels
         if score >= 50 and level == 1:
             level = 2
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+            bullets.clear()
             bullets = []
             zombies = []
             clowns = []
-
+        
             level_text1 = level_font.render('Now Prepare...', 1, (0, 255, 0))
             level_text2 = level_font.render('For Level 2', 1, (0, 255, 0))
             level_text_rect1 = level_text1.get_rect()
@@ -350,6 +353,7 @@ def main_game():
             clowns.clear()
             enemies.clear()
             player_health = 5
+                    
             
 
         redraw_window()
