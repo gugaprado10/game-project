@@ -281,6 +281,7 @@ def main_game():
 
         if player_health <= 0:
             run = False
+            song.stop()
 
         # Change levels
         if score >= 100 and level == 1:
