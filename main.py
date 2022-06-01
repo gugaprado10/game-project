@@ -1,3 +1,4 @@
+import vlc
 import pygame
 import sys
 from button import Button
@@ -5,6 +6,7 @@ import textwrap
 from game import main_game
 
 pygame.init()
+pygame.mixer.init()
 
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 540
@@ -14,11 +16,14 @@ pygame.display.set_caption("Menu")
 BG = pygame.image.load("menu_assets/bg-menu.png")
 BG = pygame.transform.scale(pygame.image.load(
     "menu_assets/bg-menu.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
+menu_ok = pygame.mixer.Sound('assets/music_sound_effects/menu ok.wav')
+menu_back = pygame.mixer.Sound('assets/music_sound_effects/menu back.wav')
+menu_music = vlc.MediaPlayer('assets/music_sound_effects/menu music.wav')
 
 
 
 
-def get_font(size):
+def get_font(size): 
     return pygame.font.Font("menu_assets/pixel.ttf", size)
 
 
@@ -62,6 +67,7 @@ def credits():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if CREDITS_BACK.checkForInput(CREDITS_MOUSE_POS):
+                    pygame.mixer.Sound.play(menu_back)
                     main_menu()
 
         pygame.display.update()
@@ -69,6 +75,8 @@ def credits():
 
 def main_menu():
     while True:
+        menu_music.play()
+        vlc.MediaPlayer.audio_set_volume(menu_music, 80)
         SCREEN.blit(BG, (0, 0))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
@@ -97,8 +105,11 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.mixer.Sound.play(menu_ok)
+                    menu_music.stop()
                     play()
                 if CREDITS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.mixer.Sound.play(menu_ok)
                     credits()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                     pygame.quit()

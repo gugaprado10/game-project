@@ -206,15 +206,16 @@ def main_game():
 
     level = 1
 
-    song.play()
-    vlc.MediaPlayer.audio_set_volume(song, 80)
-
+    
     run = True
     while run:
         clock.tick(FPS)
+        song.play()
+        vlc.MediaPlayer.audio_set_volume(song, 80)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                song.stop()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     player.shoot()
@@ -274,8 +275,9 @@ def main_game():
                     knives.remove(knife)
                 if knife.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
-                    knives.remove(knife)
                     player_health -= 1
+                    if len(knives) > 0:
+                        knives.remove(knife)
 
         if player_health <= 0:
             run = False
