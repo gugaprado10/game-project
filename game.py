@@ -5,8 +5,6 @@ import vlc
 import time
 
 def main_game():
-    pygame.mixer.init()
-
     # Variables
     FPS = 50
     SCREEN_WIDTH = 960
@@ -18,6 +16,7 @@ def main_game():
 
     # Initialization
     pygame.init()
+    pygame.mixer.init()
     window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Zombie Shooter")
     clock = pygame.time.Clock()
@@ -32,6 +31,7 @@ def main_game():
     left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
     zombie_sprite = pygame.image.load("assets/zombie.png")
     clown_sprite = pygame.image.load("assets/clown.png")
+    boss_sprite = pygame.transform.scale(pygame.image.load('assets/boss sprite.png'), (350, 350))
     heart_size = 30
     heart_sprite = pygame.transform.scale(
         pygame.image.load("assets/heart.png"), (heart_size, heart_size))
@@ -44,6 +44,7 @@ def main_game():
     laugh_sound = pygame.mixer.Sound(
         'assets/music_sound_effects/laugh.mp3')
     song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
+    secret_music = vlc.MediaPlayer('assets/music_sound_effects/secret music.mp3')
 
 
     def rot_center(image, angle, x, y):
@@ -88,7 +89,7 @@ def main_game():
         def move(self):
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH//3:
+            if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH:
                 self.right = True
                 self.left = False
                 self.x += self.vel
@@ -190,6 +191,8 @@ def main_game():
             bullet.draw(window)
         for knife in knives:
             knife.draw(window)
+        if level == 3 or level == 4:
+            window.blit(boss_sprite, (620, 180))
         pygame.display.update()
 
 
@@ -199,19 +202,20 @@ def main_game():
     zombies = []
     clowns = []
     enemies = []
+    boss = []
     score = 0
     player_health = 5
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
-
     level = 1
 
     
     run = True
     while run:
         clock.tick(FPS)
-        song.play()
-        vlc.MediaPlayer.audio_set_volume(song, 80)
+        if level == 1 or level == 2:
+            song.play()
+            vlc.MediaPlayer.audio_set_volume(song, 80)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -220,6 +224,8 @@ def main_game():
                 if event.key == pygame.K_SPACE:
                     player.shoot()
                     pygame.mixer.Sound.play(shoot_effect)
+                if event.key == pygame.K_LCTRL and score > 100 and level == 2:
+                    level = 3
 
         while len(zombies) < MAX_ZOMBIES:
             zombie = Enemy(zombie_sprite)
@@ -237,12 +243,15 @@ def main_game():
                 clown.spawn()
                 pygame.mixer.Sound.play(damage_sound)
 
-        if score >= 100 and score < 250:
+        if level == 1 and score >= 100 and score < 250:
             MAX_ZOMBIES = 5
-        if score >= 250 and score < 500:
+        if level == 1 and score >= 250 and score < 500:
             MAX_ZOMBIES = 7
-        if score >= 500:
+        if level == 1 and score >= 500:
             MAX_ZOMBIES = 10
+
+        if level == 2 and score >= 500 and score < 700:
+            MAX_CLOWNS = 6
 
         while len(clowns) < MAX_CLOWNS:
             clown = Enemy(clown_sprite)
@@ -265,10 +274,12 @@ def main_game():
                 elif enemy.rect.colliderect(bullet.rect):
                     if enemy in zombies:
                         zombies.remove(enemy)
+                        score += 10
                     else:
                         clowns.remove(enemy)
+                        score += 20
                     bullets.remove(bullet)
-                    score += 10
+                    
 
             for knife in knives:
                 if knife.x <= 0:
@@ -284,8 +295,7 @@ def main_game():
             song.stop()
 
         # Change levels
-        if score >= 100 and level == 1:
-
+        if score >= 50 and level == 1:
             level = 2
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -307,11 +317,40 @@ def main_game():
                         level_text_rect2.width//2, (SCREEN_HEIGHT//3)*2 -
                         level_text_rect2.height//2))
             pygame.display.update()
-            MAX_ZOMBIES = 4
+            MAX_ZOMBIES = 0
             MAX_CLOWNS = 4
             pygame.mixer.Sound.play(laugh_sound)
             time.sleep(5)
-            continue
+
+        if level == 3:
+            level = 4
+            background = pygame.transform.scale(pygame.image.load(
+                'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+            song.stop()
+            secret_music.play()
+            level_text1 = level_font.render('You have found', 1, (0, 255, 0))
+            level_text2 = level_font.render('the secret level...', 1, (0, 255, 0))
+            level_text_rect1 = level_text1.get_rect()
+            level_text_rect2 = level_text2.get_rect()
+            pygame.draw.rect(window, (0, 0, 0), pygame.Rect(
+                0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
+
+            window.blit(level_text1, (SCREEN_WIDTH//2 -
+                        level_text_rect1.width//2, SCREEN_HEIGHT//3 -
+                        level_text_rect1.height//2))
+            window.blit(level_text2, (SCREEN_WIDTH//2 -
+                        level_text_rect2.width//2, (SCREEN_HEIGHT//3)*2 -
+                        level_text_rect2.height//2))
+            pygame.display.update()
+            time.sleep(3)
+            MAX_ZOMBIES = 0
+            MAX_CLOWNS = 0
+            knives.clear()
+            zombies.clear()
+            clowns.clear()
+            enemies.clear()
+            player_health = 5
+            
 
         redraw_window()
 
