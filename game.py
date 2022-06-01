@@ -345,7 +345,7 @@ def main_game():
                         level_text_rect2.width//2, (SCREEN_HEIGHT//3)*2 -
                         level_text_rect2.height//2))
             pygame.display.update()
-            time.sleep(3)
+            time.sleep(4)
             MAX_ZOMBIES = 0
             MAX_CLOWNS = 0
             knives.clear()
