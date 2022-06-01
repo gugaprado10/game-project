@@ -2,7 +2,7 @@ import pygame
 import sys
 from button import Button
 import textwrap
-
+from game import main_game
 
 pygame.init()
 
@@ -15,7 +15,7 @@ BG = pygame.image.load("menu_assets/bg-menu.png")
 BG = pygame.transform.scale(pygame.image.load(
     "menu_assets/bg-menu.png"), (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-run = True
+
 
 
 def get_font(size):
@@ -23,9 +23,7 @@ def get_font(size):
 
 
 def play():
-    global run
-    import game
-    run = False
+    main_game()
 
 
 def credits():
@@ -70,7 +68,7 @@ def credits():
 
 
 def main_menu():
-    while run == True:
+    while True:
         SCREEN.blit(BG, (0, 0))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
