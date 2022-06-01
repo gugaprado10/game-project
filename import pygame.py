@@ -20,7 +20,7 @@ clock = pygame.time.Clock()
 
 # Assets
 background = pygame.transform.scale(pygame.image.load(
-    'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+    'assets/background1.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 shooting_frames = [pygame.image.load(
     f"assets/player/shoot{i}.png") for i in range(0, 5)]
 right_frames = [pygame.image.load(
@@ -33,7 +33,7 @@ heart_sprite = pygame.transform.scale(
 shoot_effect = pygame.mixer.Sound(
     'assets/music_sound_effects/shootsound.mp3')
 damage_sound = pygame.mixer.Sound(
-    'assets/music_sound_effects/damagesound.mp3')
+    'assets/music_sound_effects/Minecraft Oof.mp3')
 song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
 
 

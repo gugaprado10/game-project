@@ -4,6 +4,8 @@ import random
 import vlc
 import time
 
+from main import main_menu
+
 pygame.mixer.init()
 
 # Variables
@@ -11,7 +13,7 @@ FPS = 50
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 540
 MAX_BULLETS = 5
-MAX_ZOMBIES = 4
+MAX_ZOMBIES = 3
 MAX_CLOWNS = 0
 
 
@@ -39,7 +41,7 @@ knife_sprite = pygame.transform.scale(
 shoot_effect = pygame.mixer.Sound(
     'assets/music_sound_effects/shootsound.mp3')
 damage_sound = pygame.mixer.Sound(
-    'assets/music_sound_effects/damagesound.mp3')
+    'assets/music_sound_effects/Minecraft Oof.mp3')
 laugh_sound = pygame.mixer.Sound(
     'assets/music_sound_effects/laugh.mp3')
 song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
@@ -73,7 +75,7 @@ class Player(object):
 
         if not(self.is_shooting):
             if self.left:
-                window.blit(left_frames[self.walk_count//3], (self.x, self.y))
+                window.blit(right_frames[self.walk_count//3], (self.x, self.y))
                 self.walk_count += 1
             elif self.right:
                 window.blit(right_frames[self.walk_count//3], (self.x, self.y))
@@ -223,6 +225,25 @@ while run:
         zombie = Enemy(zombie_sprite)
         zombies.append(zombie)
 
+    for zombie in zombies:
+        if zombie.rect.colliderect(player):
+            player_health -= 1
+            zombie.spawn()
+            pygame.mixer.Sound.play(damage_sound)
+
+    for clown in clowns:
+        if clown.rect.colliderect(player):
+            player_health -= 1
+            clown.spawn()
+            pygame.mixer.Sound.play(damage_sound)
+
+    if score >= 100 and score < 250:
+        MAX_ZOMBIES = 5
+    if score >= 250 and score < 500:
+        MAX_ZOMBIES = 7
+    if score >= 500:
+        MAX_ZOMBIES = 10
+
     while len(clowns) < MAX_CLOWNS:
         clown = Enemy(clown_sprite)
         clowns.append(clown)
@@ -258,7 +279,8 @@ while run:
                 player_health -= 1
 
     if player_health <= 0:
-        run = False
+        main_menu()
+        player_health = 5
 
     # Change levels
     if score >= 100 and level == 1:
