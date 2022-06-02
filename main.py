@@ -38,7 +38,7 @@ def credits():
         SCREEN.fill("black")
 
         font = pygame.font.Font("menu_assets/pixel.ttf", 45, bold=True)
-        your_text = "The gruesome zombie apocalypse had broken out three days ago. The world you once knew is gone. The bustling streets are now quiet, except for the occasional cry for help. You are face to face with terrifying creatures - zombies and (sneaky) clowns, which are eager to drink your blood and eat your brain. Keep your eyes open and don't let your weapon out of your hands. Good luck!"
+        your_text = "A gruesome zombie apocalypse broke out yesterday. The world you once knew is gone. The bustling streets are now quiet, except for the occasional cry for help. You are face to face with terrifying creatures - zombies and (sneaky) clowns, which are eager to drink your blood and eat your brain. Keep your eyes open and don't let your weapon out of your hands. Good luck!"
         txtX, txtY = 125, 70
         wraplen = 50
         count = 0
@@ -81,7 +81,7 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("Apocalypse", True, "#1dd200")
+        MENU_TEXT = get_font(100).render("Apocalypse Yesterday", True, "#1dd200")
         MENU_RECT = MENU_TEXT.get_rect(
             center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 200))
 
