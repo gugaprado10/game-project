@@ -37,6 +37,8 @@ def main_game():
         pygame.image.load("assets/heart.png"), (heart_size, heart_size))
     knife_sprite = pygame.transform.scale(
         pygame.image.load("assets/knife.png"), (40, 20))
+    fireball_sprite = pygame.transform.scale(
+        pygame.image.load("assets/fireball1.png"), (73, 35))
     shoot_effect = pygame.mixer.Sound(
         'assets/music_sound_effects/shootsound.mp3')
     damage_sound = pygame.mixer.Sound(
@@ -170,6 +172,19 @@ def main_game():
                                 self.rect.y + 2, 10, 5, knife_sprite, -10)
                 knives.append(knife)
 
+    class Boss(object):
+        def __init__(self, sprite):
+            self.sprite = sprite
+            self.rect = sprite.get_rect(topleft=(620,180))
+
+        def draw(self, window):
+            window.blit(self.sprite, self.rect)
+
+        def shoot(self):
+            if random.randrange(0, 300) < 1:
+                fireball = Projectile(self.rect.x,
+                                self.rect.y + 2, 10, 5, fireball_sprite, -10)
+                fireballs.append(fireball)
 
     def draw_lives(window):
         for i in range(1, player_health+1):
@@ -183,6 +198,8 @@ def main_game():
         window.blit(score_text, (20, 10))
 
         player.draw(window)
+        if level == 3 or level == 4:
+            boss.draw(window) 
         for zombie in zombies:
             zombie.draw(window)
         for clown in clowns:
@@ -191,8 +208,8 @@ def main_game():
             bullet.draw(window)
         for knife in knives:
             knife.draw(window)
-        if level == 3 or level == 4:
-            window.blit(boss_sprite, (620, 180))
+        for fireball in fireballs:
+            fireball.draw(window)
         pygame.display.update()
 
 
@@ -202,7 +219,7 @@ def main_game():
     zombies = []
     clowns = []
     enemies = []
-    boss = []
+    fireballs = []
     score = 0
     player_health = 5
     font = pygame.font.Font('assets/font.ttf', 30)
@@ -254,6 +271,9 @@ def main_game():
 
         if level == 2 and score >= 500 and score < 700:
             MAX_CLOWNS = 6
+
+        if level == 2 and score >= 700:
+            MAX_CLOWNS = 8
 
         while len(clowns) < MAX_CLOWNS:
             clown = Enemy(clown_sprite)
@@ -332,6 +352,7 @@ def main_game():
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
             song.stop()
             secret_music.play()
+            boss = Boss(boss_sprite)
             level_text1 = level2_font.render('You have found the', 1, (0, 255, 0))
             level_text2 = level2_font.render('secret level...', 1, (0, 255, 0))
             level_text_rect1 = level_text1.get_rect()
