@@ -28,7 +28,6 @@ def main_game():
         f"assets/player/shoot{i}.png") for i in range(0, 5)]
     right_frames = [pygame.image.load(
         f'assets/player/run{i}.png') for i in range(0, 6)]
-    left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
     zombie_sprite = pygame.image.load("assets/zombie.png")
     clown_sprite = pygame.image.load("assets/clown.png")
     boss_sprite = pygame.transform.scale(pygame.image.load('assets/boss sprite.png'), (350, 350))
@@ -47,14 +46,6 @@ def main_game():
         'assets/music_sound_effects/laugh.mp3')
     song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
     secret_music = vlc.MediaPlayer('assets/music_sound_effects/secret music.mp3')
-
-
-    def rot_center(image, angle, x, y):
-        rotated_image = pygame.transform.rotate(image, angle)
-        new_rect = rotated_image.get_rect(
-            center=image.get_rect(center=(x, y)).center)
-        return rotated_image
-
 
     class Player(object):
         def __init__(self, x, y):
@@ -243,7 +234,7 @@ def main_game():
                 if event.key == pygame.K_SPACE:
                     player.shoot()
                     pygame.mixer.Sound.play(shoot_effect)
-                if event.key == pygame.K_LCTRL and score > 100 and level == 2:
+                if event.key == pygame.K_LSHIFT and score > 100 and level == 2:
                     level = 3
 
         while len(zombies) < MAX_ZOMBIES:
@@ -272,8 +263,11 @@ def main_game():
         if level == 2 and score >= 500 and score < 700:
             MAX_CLOWNS = 6
 
-        if level == 2 and score >= 700:
+        if level == 2 and score >= 700 and score < 900:
             MAX_CLOWNS = 8
+
+        if level == 2 and score >= 1000:
+            MAX_CLOWNS = 10
 
         while len(clowns) < MAX_CLOWNS:
             clown = Enemy(clown_sprite)
