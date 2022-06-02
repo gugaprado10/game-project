@@ -29,6 +29,7 @@ def main_game():
         f"assets/player/shoot{i}.png") for i in range(0, 5)]
     right_frames = [pygame.image.load(
         f'assets/player/run{i}.png') for i in range(0, 6)]
+    left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
     zombie_sprite = pygame.image.load("assets/zombie.png")
     clown_sprite = pygame.image.load("assets/clown.png")
     heart_size = 30
@@ -43,9 +44,6 @@ def main_game():
     laugh_sound = pygame.mixer.Sound(
         'assets/music_sound_effects/laugh.mp3')
     song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
-
-
-
 
     class Player(object):
         def __init__(self, x, y):
@@ -169,7 +167,7 @@ def main_game():
             window.blit(heart_sprite, (SCREEN_WIDTH - i*(heart_size+5), 10))
 
 
-    def redraw_window():
+    def draw_window():
         window.blit(background, (0, 0))
         draw_lives(window)
         score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
@@ -278,7 +276,7 @@ def main_game():
             song.stop()
 
         # Change levels
-        if score >= 100 and level == 1:
+        if score >= 50 and level == 1:
 
             level = 2
             background = pygame.transform.scale(pygame.image.load(
@@ -307,7 +305,7 @@ def main_game():
             time.sleep(5)
             bullets.clear()
 
-        redraw_window()
+        draw_window()
 
 if __name__ == '__main__':
     main_game()
