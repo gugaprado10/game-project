@@ -2,7 +2,7 @@ import pygame
 import os
 import random
 import vlc
-import time
+import sched, time
 
 def main_game():
     # Variables
@@ -37,7 +37,7 @@ def main_game():
     knife_sprite = pygame.transform.scale(
         pygame.image.load("assets/knife.png"), (40, 20))
     fireball_sprite = pygame.transform.scale(
-        pygame.image.load("assets/fireball1.png"), (73, 35))
+        pygame.image.load("assets/fireball1.png"), (210, 100))
     shoot_effect = pygame.mixer.Sound(
         'assets/music_sound_effects/shootsound.mp3')
     damage_sound = pygame.mixer.Sound(
@@ -172,9 +172,8 @@ def main_game():
             window.blit(self.sprite, self.rect)
 
         def shoot(self):
-            if random.randrange(0, 300) < 1:
-                fireball = Projectile(self.rect.x,
-                                self.rect.y + 2, 10, 5, fireball_sprite, -10)
+                fireball = Projectile(self.rect.x - 50,
+                                random.randrange(200, 490), 100, 50, fireball_sprite, -5)
                 fireballs.append(fireball)
 
     def draw_lives(window):
@@ -216,7 +215,7 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
-    level = 1
+    level = 3
 
     
     run = True
@@ -298,15 +297,15 @@ def main_game():
                     
 
             for knife in knives:
-                if knife.x <= 0:
-                    knives.remove(knife)
                 if knife.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
                     player_health -= 1
                     if len(knives) > 0:
                         knives.remove(knife)
+                if knife.x <= 0:
+                    knives.remove(knife)
 
-        if player_health <= 0:
+        if player_health <= 0: 
             run = False
             song.stop()
             secret_music.stop()
@@ -346,7 +345,6 @@ def main_game():
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
             song.stop()
             secret_music.play()
-            boss = Boss(boss_sprite)
             level_text1 = level2_font.render('You have found the', 1, (0, 255, 0))
             level_text2 = level2_font.render('secret level...', 1, (0, 255, 0))
             level_text_rect1 = level_text1.get_rect()
@@ -369,6 +367,8 @@ def main_game():
             clowns.clear()
             enemies.clear()
             player_health = 5
+            boss = Boss(boss_sprite)
+            boss.shoot()
                     
             
 
