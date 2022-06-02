@@ -81,7 +81,7 @@ def main_menu():
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("ZombiePopper", True, "#1dd200")
+        MENU_TEXT = get_font(100).render("Apocalypse", True, "#1dd200")
         MENU_RECT = MENU_TEXT.get_rect(
             center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 200))
 

@@ -207,6 +207,7 @@ def main_game():
     player_health = 5
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
+    level2_font = pygame.font.Font('assets/font.ttf', 45)
     level = 1
 
     
@@ -331,8 +332,8 @@ def main_game():
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
             song.stop()
             secret_music.play()
-            level_text1 = level_font.render('You have found', 1, (0, 255, 0))
-            level_text2 = level_font.render('the secret level...', 1, (0, 255, 0))
+            level_text1 = level2_font.render('You have found the', 1, (0, 255, 0))
+            level_text2 = level2_font.render('secret level...', 1, (0, 255, 0))
             level_text_rect1 = level_text1.get_rect()
             level_text_rect2 = level_text2.get_rect()
             pygame.draw.rect(window, (0, 0, 0), pygame.Rect(
