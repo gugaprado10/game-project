@@ -1,40 +1,29 @@
 import pygame
 import os
 import random
-import vlc
-
 
 # Variables
 FPS = 50
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 540
 MAX_BULLETS = 5
-MAX_ZOMBIES = 3
+MAX_ZOMBIES = 5
 
 # Initialization
 pygame.init()
-pygame.mixer.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Shooter")
 clock = pygame.time.Clock()
 
 # Assets
 background = pygame.transform.scale(pygame.image.load(
-    'assets/background1.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
+    'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
 shooting_frames = [pygame.image.load(
     f"assets/player/shoot{i}.png") for i in range(0, 5)]
 right_frames = [pygame.image.load(
     f'assets/player/run{i}.png') for i in range(0, 6)]
 left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
 zombie_sprite = pygame.image.load("assets/zombie.png")
-heart_size = 30
-heart_sprite = pygame.transform.scale(
-    pygame.image.load("assets/heart.png"), (heart_size, heart_size))
-shoot_effect = pygame.mixer.Sound(
-    'assets/music_sound_effects/shootsound.mp3')
-damage_sound = pygame.mixer.Sound(
-    'assets/music_sound_effects/Minecraft Oof.mp3')
-song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
 
 
 class Player(object):
@@ -58,7 +47,7 @@ class Player(object):
 
         if not(self.is_shooting):
             if self.left:
-                window.blit(right_frames[self.walk_count//3], (self.x, self.y))
+                window.blit(left_frames[self.walk_count//3], (self.x, self.y))
                 self.walk_count += 1
             elif self.right:
                 window.blit(right_frames[self.walk_count//3], (self.x, self.y))
@@ -72,6 +61,8 @@ class Player(object):
     def move(self):
         keys = pygame.key.get_pressed()
 
+        if keys[pygame.K_SPACE]:
+            self.shoot()
         if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH//3:
             self.right = True
             self.left = False
@@ -87,7 +78,7 @@ class Player(object):
 
     def shoot(self):
         self.is_shooting = True
-        if len(bullets) <= MAX_BULLETS:
+        if len(bullets) <= MAX_BULLETS and self.shoot_count == 0:
             bullet = Projectile(player.x + player.rect().width,
                                 player.y + player.rect().height//2 + 2, 10, 5)
             bullets.append(bullet)
@@ -141,16 +132,12 @@ class Enemy(object):
             270, 500)))
 
 
-def draw_lives(window):
-    for i in range(1, player_health+1):
-        window.blit(heart_sprite, (SCREEN_WIDTH - i*(heart_size+5), 10))
-
-
 def redraw_window():
     window.blit(background, (0, 0))
-    draw_lives(window)
     score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
+    lives_text = font.render('Lives: ' + str(player_health), 1, (255, 0, 0))
     window.blit(score_text, (20, 10))
+    window.blit(lives_text, (20, 70))
 
     player.draw(window)
     for zombie in zombies:
@@ -171,15 +158,9 @@ font = pygame.font.SysFont('assets/font.ttf', 45, True)
 run = True
 while run:
     clock.tick(FPS)
-    song.play()
-    vlc.MediaPlayer.audio_set_volume(song, 80)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                player.shoot()
-                pygame.mixer.Sound.play(shoot_effect)
 
     while len(zombies) < MAX_ZOMBIES:
         zombie = Enemy(zombie_sprite)
@@ -190,24 +171,15 @@ while run:
             player_health -= 1
             zombie.spawn()
             zombie.has_passed = False
-            pygame.mixer.Sound.play(damage_sound)
-        if zombie.rect.colliderect(player):
-            player_health -= 1
-            zombie.spawn()
-            pygame.mixer.Sound.play(damage_sound)
         for bullet in bullets:
             if zombie.rect.colliderect(bullet.rect):
                 zombies.remove(zombie)
                 bullets.remove(bullet)
                 score += 10
-                if score >= 100 and score < 250:
-                    MAX_ZOMBIES = 5
-                if score >= 250 and score < 500:
-                    MAX_ZOMBIES = 7
-                if score >= 500:
+                if score > 250:
                     MAX_ZOMBIES = 10
 
     if player_health <= 0:
         run = False
 
-    redraw_window()
+    redraw_window() 

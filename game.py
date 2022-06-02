@@ -29,7 +29,6 @@ def main_game():
         f"assets/player/shoot{i}.png") for i in range(0, 5)]
     right_frames = [pygame.image.load(
         f'assets/player/run{i}.png') for i in range(0, 6)]
-    left_frames = [pygame.transform.flip(i, True, False) for i in right_frames]
     zombie_sprite = pygame.image.load("assets/zombie.png")
     clown_sprite = pygame.image.load("assets/clown.png")
     heart_size = 30
@@ -46,11 +45,6 @@ def main_game():
     song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
 
 
-    def rot_center(image, angle, x, y):
-        rotated_image = pygame.transform.rotate(image, angle)
-        new_rect = rotated_image.get_rect(
-            center=image.get_rect(center=(x, y)).center)
-        return rotated_image
 
 
     class Player(object):
@@ -311,7 +305,7 @@ def main_game():
             MAX_CLOWNS = 4
             pygame.mixer.Sound.play(laugh_sound)
             time.sleep(5)
-            continue
+            bullets.clear()
 
         redraw_window()
 
