@@ -46,6 +46,8 @@ def main_game():
         'assets/music_sound_effects/laugh.mp3')
     song = vlc.MediaPlayer('assets/music_sound_effects/music.mp3')
     secret_music = vlc.MediaPlayer('assets/music_sound_effects/secret music.mp3')
+    boss_hit = pygame.mixer.Sound('assets/music_sound_effects/boss hit.wav')
+    victory_fanfare = vlc.MediaPlayer('assets/music_sound_effects/victory fanfare.mp3')
 
     class Player(object):
         def __init__(self, x, y):
@@ -188,7 +190,7 @@ def main_game():
 
         def health_bar(self, window):
             pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*2, 25))
-            pygame.draw.rect(window, (0, 0, 0), (715, 135, 200, 25), width=4)
+            pygame.draw.rect(window, (0, 0, 0), (711, 135, 200, 25), width=4)
 
         def shoot(self):
                 fireball = Projectile(self.rect.x - 50,
@@ -321,6 +323,11 @@ def main_game():
                 if bullet.x >= 680:
                     bullets.remove(bullet)
                     boss.health-=1
+                    pygame.mixer.Sound.play(boss_hit)
+                    pygame.mixer.Sound.set_volume(boss_hit, 0.5)
+                    if boss.health <= 0:
+                        secret_music.stop()
+                        victory_fanfare.play()
 
 
             for knife in knives:
