@@ -263,6 +263,7 @@ def main_game():
                 run = False
                 song.stop()
                 secret_music.stop()
+                victory_fanfare.stop()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     player.shoot()
