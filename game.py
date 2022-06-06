@@ -186,7 +186,7 @@ def main_game():
         def __init__(self, sprite):
             self.sprite = sprite
             self.rect = sprite.get_rect(topleft=(620,180))
-            self.health = 100
+            self.health = 100 
 
         def draw(self, window):
             window.blit(self.sprite, self.rect)
@@ -348,7 +348,7 @@ def main_game():
                     if boss.health <= 0:
                         secret_music.stop()
                         victory_fanfare.play()
-            
+
             for fireball in fireballs:
                 if fireball.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
@@ -357,14 +357,18 @@ def main_game():
                         fireballs.remove(fireball)
                 if fireball.x <= 0 and len(fireballs)>0:
                     fireballs.remove(fireball)
+
             for fireball2 in big_fireballs:
                 if fireball2.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
                     player_health -= 1
                     if len(big_fireballs) > 0:
-                        fireballs.remove(fireball)
+                        big_fireballs.remove(fireball2)
                 if fireball2.x + 123 <= 0 and len(fireballs)>0:
                     big_fireballs.remove(fireball2)
+                for fireball in fireballs:
+                    if fireball.rect.colliderect(fireball2):
+                        fireballs.remove(fireball)
             
             #Alternative 1: 
     
