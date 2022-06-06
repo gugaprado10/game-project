@@ -12,6 +12,7 @@ def main_game():
     MAX_BULLETS = 5
     MAX_ZOMBIES = 3
     MAX_CLOWNS = 0
+    MAX_FIREBALLS = 4
 
 
     # Initialization
@@ -37,7 +38,9 @@ def main_game():
     knife_sprite = pygame.transform.scale(
         pygame.image.load("assets/knife.png"), (40, 20))
     fireball_sprite = pygame.transform.scale(
-        pygame.image.load("assets/fireball1.png"), (210, 100))
+        pygame.image.load("assets/fireball2.png"), (72, 45))
+    fireball2_sprite = pygame.transform.scale(
+        pygame.image.load("assets/fireball1.png"), (257, 150))
     shoot_effect = pygame.mixer.Sound(
         'assets/music_sound_effects/shootsound.mp3')
     damage_sound = pygame.mixer.Sound(
@@ -193,9 +196,14 @@ def main_game():
             pygame.draw.rect(window, (0, 0, 0), (711, 135, 204, 25), width=4)
 
         def shoot(self):
-                fireball = Projectile(self.rect.x - 50,
+                fireball = Projectile(self.rect.x,
                                 random.randrange(200, 490), 100, 50, fireball_sprite, -5)
                 fireballs.append(fireball)
+        
+        def shoot2(self):
+            fireball2 = Projectile(self.rect.x,
+                                random.randrange(200, 490), 100, 50, fireball2_sprite, -5)
+            big_fireballs.append(fireball2)
 
     def draw_lives(window):
         for i in range(1, player_health+1):
@@ -222,6 +230,8 @@ def main_game():
             knife.draw(window)
         for fireball in fireballs:
             fireball.draw(window)
+        for fireball2 in big_fireballs:
+            fireball2.draw(window)
         pygame.display.update()
 
 
@@ -232,14 +242,15 @@ def main_game():
     clowns = []
     enemies = []
     fireballs = []
+    big_fireballs = []
     score = 0
     player_health = 5
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
-    level = 2
-    secret = True 
-
+    level = 1
+    secret = False
+    boss_special = False
     
     run = True
     while run:
@@ -328,7 +339,60 @@ def main_game():
                     if boss.health <= 0:
                         secret_music.stop()
                         victory_fanfare.play()
+            
+            for fireball in fireballs:
+                if fireball.rect.colliderect(player.rect()):
+                    pygame.mixer.Sound.play(damage_sound)
+                    player_health -= 1
+                    if len(fireballs) > 0:
+                        fireballs.remove(fireball)
+                if fireball.x <= 0 and len(fireballs)>0:
+                    fireballs.remove(fireball)
+            for fireball2 in big_fireballs:
+                if fireball2.rect.colliderect(player.rect()):
+                    pygame.mixer.Sound.play(damage_sound)
+                    player_health -= 1
+                    if len(big_fireballs) > 0:
+                        fireballs.remove(fireball)
+                if fireball2.x <= 0 and len(fireballs)>0:
+                    big_fireballs.remove(fireball2)
+            
+            #Alternative 1: 
+    
+            # if boss.health>50:
+            #     while len(fireballs)<2:
+            #         boss.shoot()
+            # if boss.health <= 50:
+            #     while len(fireballs)<3:
+            #         boss.shoot()
+            # if boss.health == 25:
+            #     if boss_special == False:
+            #         boss.shoot2()
+            #         boss_special = True
+            # if boss.health == 10:
+            #     if boss_special == True:
+            #         boss.shoot2()
+            #         boss_special = False
 
+            # Alternative 2:
+
+            if boss.health > 50:
+                if random.randrange(0, 120) <= 2 and len(fireballs)<MAX_FIREBALLS:
+                    boss.shoot()
+            if boss.health <= 50:
+                MAX_FIREBALLS = 8 
+                if random.randrange(0, 100) <= 2 and len(fireballs)<MAX_FIREBALLS:
+                    boss.shoot()
+            if len(fireballs)==0:
+                boss.shoot()
+            if boss.health == 25:
+                if boss_special == False:
+                    boss.shoot2()
+                    boss_special = True
+            if boss.health == 10:
+                if boss_special == True:
+                    boss.shoot2()
+                    boss_special = False    
 
             for knife in knives:
                 if knife.rect.colliderect(player.rect()):
@@ -338,6 +402,7 @@ def main_game():
                         knives.remove(knife)
                 if knife.x <= 0 and len(knives)>0:
                     knives.remove(knife)
+
 
         if player_health <= 0: 
             run = False
@@ -402,9 +467,9 @@ def main_game():
             clowns.clear()
             enemies.clear()
             player_health = 5
-            boss = Boss(boss_sprite)
-            boss.shoot()        
+            boss = Boss(boss_sprite)        
             
+
 
         redraw_window()
 
