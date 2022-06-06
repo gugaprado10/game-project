@@ -329,6 +329,14 @@ def main_game():
                             clowns.remove(enemy)
                             score += 20
                         bullets.remove(bullet)
+                for knife in knives:
+                    if knife.rect.colliderect(player.rect()):
+                        pygame.mixer.Sound.play(damage_sound)
+                        player_health -= 1
+                        if len(knives) > 0:
+                            knives.remove(knife)
+                    if knife.x <= 0 and len(knives)>0:
+                        knives.remove(knife)
 
         if level == 3:
             for bullet in bullets:
@@ -394,15 +402,6 @@ def main_game():
                 if boss_special == True:
                     boss.shoot2()
                     boss_special = False    
-
-            for knife in knives:
-                if knife.rect.colliderect(player.rect()):
-                    pygame.mixer.Sound.play(damage_sound)
-                    player_health -= 1
-                    if len(knives) > 0:
-                        knives.remove(knife)
-                if knife.x <= 0 and len(knives)>0:
-                    knives.remove(knife)
 
 
         if player_health <= 0: 
