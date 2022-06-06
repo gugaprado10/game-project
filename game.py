@@ -190,7 +190,7 @@ def main_game():
 
         def health_bar(self, window):
             pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*2, 25))
-            pygame.draw.rect(window, (0, 0, 0), (711, 135, 200, 25), width=4)
+            pygame.draw.rect(window, (0, 0, 0), (711, 135, 204, 25), width=4)
 
         def shoot(self):
                 fireball = Projectile(self.rect.x - 50,
