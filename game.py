@@ -235,8 +235,8 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
-    level = 1
-    secret = False
+    level = 2
+    secret = True 
 
     
     run = True
@@ -303,6 +303,7 @@ def main_game():
                 player_health -= 1
                 enemy.spawn()
                 enemy.has_passed = False
+        if level != 3:
             for bullet in bullets:
                 if bullet.x >= SCREEN_WIDTH:
                     bullets.remove(bullet)
@@ -314,7 +315,11 @@ def main_game():
                         clowns.remove(enemy)
                         score += 20
                     bullets.remove(bullet)
-                    
+        if level == 3:
+            for bullet in bullets:
+                if bullet.x >= 680:
+                    bullets.remove(bullet)
+
 
             for knife in knives:
                 if knife.rect.colliderect(player.rect()):
@@ -322,7 +327,7 @@ def main_game():
                     player_health -= 1
                     if len(knives) > 0:
                         knives.remove(knife)
-                if knife.x < 0:
+                if knife.x <= 0 and len(knives)>0:
                     knives.remove(knife)
 
         if player_health <= 0: 
