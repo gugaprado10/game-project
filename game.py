@@ -77,23 +77,37 @@ def main_game():
                 window.blit(shooting_frames[self.shoot_count//3], (self.x, self.y))
                 self.shoot_count += 1
 
-            self.move()
+            self.move(level)
 
-        def move(self):
+        def move(self, level):
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH:
-                self.right = True
-                self.left = False
-                self.x += self.vel
-            elif keys[pygame.K_LEFT] and self.x - self.vel > 10:
-                self.right = False
-                self.left = True
-                self.x -= self.vel
-            if keys[pygame.K_UP] and self.y - self.vel > 270:
-                self.y -= self.vel
-            elif keys[pygame.K_DOWN] and self.y + self.vel + self.rect().height < SCREEN_HEIGHT:
-                self.y += self.vel
+            if level == 4: 
+                if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < 620:
+                    self.right = True
+                    self.left = False
+                    self.x += self.vel
+                elif keys[pygame.K_LEFT] and self.x - self.vel > 10:
+                    self.right = False
+                    self.left = True
+                    self.x -= self.vel
+                if keys[pygame.K_UP] and self.y - self.vel > 270:
+                    self.y -= self.vel
+                elif keys[pygame.K_DOWN] and self.y + self.vel + self.rect().height < SCREEN_HEIGHT:
+                    self.y += self.vel
+            else:
+                if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < SCREEN_WIDTH:
+                    self.right = True
+                    self.left = False
+                    self.x += self.vel
+                elif keys[pygame.K_LEFT] and self.x - self.vel > 10:
+                    self.right = False
+                    self.left = True
+                    self.x -= self.vel
+                if keys[pygame.K_UP] and self.y - self.vel > 270:
+                    self.y -= self.vel
+                elif keys[pygame.K_DOWN] and self.y + self.vel + self.rect().height < SCREEN_HEIGHT:
+                    self.y += self.vel
 
         def shoot(self):
             self.is_shooting = True
@@ -223,7 +237,7 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
-    level = 3
+    level = 1
 
     
     run = True
@@ -310,7 +324,7 @@ def main_game():
                     player_health -= 1
                     if len(knives) > 0:
                         knives.remove(knife)
-                if knife.x <= 0:
+                if knife.x < 0:
                     knives.remove(knife)
 
         if player_health <= 0: 
