@@ -173,7 +173,9 @@ def main_game():
             window.blit(self.sprite, self.rect)
 
         def health_bar(self, window):
-            pygame.draw.rect(window, (255, 215, 0), (720, 135, self.health*7, 25))
+            pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*7, 25))
+            pygame.draw.rect(window, (0, 0, 0), (715, 135, self.health*7, 25), width=4)
+
 
 
         def shoot(self):
