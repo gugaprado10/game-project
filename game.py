@@ -303,18 +303,19 @@ def main_game():
                 player_health -= 1
                 enemy.spawn()
                 enemy.has_passed = False
-        if level != 3:
-            for bullet in bullets:
-                if bullet.x >= SCREEN_WIDTH:
-                    bullets.remove(bullet)
-                elif enemy.rect.colliderect(bullet.rect):
-                    if enemy in zombies:
-                        zombies.remove(enemy)
-                        score += 10
-                    else:
-                        clowns.remove(enemy)
-                        score += 20
-                    bullets.remove(bullet)
+            if level != 3:
+                for bullet in bullets:
+                    if bullet.x >= SCREEN_WIDTH:
+                        bullets.remove(bullet)
+                    elif enemy.rect.colliderect(bullet.rect):
+                        if enemy in zombies:
+                            zombies.remove(enemy)
+                            score += 10
+                        else:
+                            clowns.remove(enemy)
+                            score += 20
+                        bullets.remove(bullet)
+
         if level == 3:
             for bullet in bullets:
                 if bullet.x >= 680:
