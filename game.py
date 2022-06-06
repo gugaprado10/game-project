@@ -181,14 +181,14 @@ def main_game():
         def __init__(self, sprite):
             self.sprite = sprite
             self.rect = sprite.get_rect(topleft=(620,180))
-            self.health = 30
+            self.health = 100
 
         def draw(self, window):
             window.blit(self.sprite, self.rect)
 
         def health_bar(self, window):
-            pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*7, 25))
-            pygame.draw.rect(window, (0, 0, 0), (715, 135, self.health*7, 25), width=4)
+            pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*2, 25))
+            pygame.draw.rect(window, (0, 0, 0), (715, 135, 200, 25), width=4)
 
         def shoot(self):
                 fireball = Projectile(self.rect.x - 50,
@@ -319,6 +319,7 @@ def main_game():
             for bullet in bullets:
                 if bullet.x >= 680:
                     bullets.remove(bullet)
+                    boss.health-=1
 
 
             for knife in knives:
@@ -370,6 +371,7 @@ def main_game():
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
             song.stop()
             secret_music.play()
+            MAX_BULLETS = 4
             level_text1 = level2_font.render('You have found the', 1, (0, 255, 0))
             level_text2 = level2_font.render('secret level...', 1, (0, 255, 0))
             level_text_rect1 = level_text1.get_rect()
