@@ -354,7 +354,7 @@ def main_game():
                     player_health -= 1
                     if len(big_fireballs) > 0:
                         fireballs.remove(fireball)
-                if fireball2.x <= 0 and len(fireballs)>0:
+                if fireball2.x + 123 <= 0 and len(fireballs)>0:
                     big_fireballs.remove(fireball2)
             
             #Alternative 1: 
