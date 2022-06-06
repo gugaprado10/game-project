@@ -82,7 +82,7 @@ def main_game():
         def move(self, level):
             keys = pygame.key.get_pressed()
 
-            if level == 4: 
+            if level == 3: 
                 if keys[pygame.K_RIGHT] and self.x + self.vel + self.rect().width < 620:
                     self.right = True
                     self.left = False
@@ -190,8 +190,6 @@ def main_game():
             pygame.draw.rect(window, (255, 215, 0), (715, 135, self.health*7, 25))
             pygame.draw.rect(window, (0, 0, 0), (715, 135, self.health*7, 25), width=4)
 
-
-
         def shoot(self):
                 fireball = Projectile(self.rect.x - 50,
                                 random.randrange(200, 490), 100, 50, fireball_sprite, -5)
@@ -209,7 +207,7 @@ def main_game():
         window.blit(score_text, (20, 10))
 
         player.draw(window)
-        if level == 3 or level == 4:
+        if level == 3:
             boss.draw(window)
             boss.health_bar(window)
         for zombie in zombies:
@@ -238,6 +236,7 @@ def main_game():
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
     level = 1
+    secret = False
 
     
     run = True
@@ -256,7 +255,7 @@ def main_game():
                     player.shoot()
                     pygame.mixer.Sound.play(shoot_effect)
                 if event.key == pygame.K_LSHIFT and score > 100 and level == 2:
-                    level = 3
+                    secret = True
 
         while len(zombies) < MAX_ZOMBIES:
             zombie = Enemy(zombie_sprite)
@@ -302,7 +301,6 @@ def main_game():
             if enemy.has_passed:
                 pygame.mixer.Sound.play(damage_sound)
                 player_health -= 1
-
                 enemy.spawn()
                 enemy.has_passed = False
             for bullet in bullets:
@@ -361,8 +359,8 @@ def main_game():
             pygame.mixer.Sound.play(laugh_sound)
             time.sleep(5)
 
-        if level == 3:
-            level = 4
+        if secret == True and level == 2:
+            level = 3
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
             song.stop()
@@ -390,8 +388,7 @@ def main_game():
             enemies.clear()
             player_health = 5
             boss = Boss(boss_sprite)
-            boss.shoot()
-                    
+            boss.shoot()        
             
 
         redraw_window()
