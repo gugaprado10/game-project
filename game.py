@@ -167,9 +167,14 @@ def main_game():
         def __init__(self, sprite):
             self.sprite = sprite
             self.rect = sprite.get_rect(topleft=(620,180))
+            self.health = 30
 
         def draw(self, window):
             window.blit(self.sprite, self.rect)
+
+        def health_bar(self, window):
+            pygame.draw.rect(window, (255, 215, 0), (720, 135, self.health*7, 25))
+
 
         def shoot(self):
                 fireball = Projectile(self.rect.x - 50,
@@ -189,7 +194,8 @@ def main_game():
 
         player.draw(window)
         if level == 3 or level == 4:
-            boss.draw(window) 
+            boss.draw(window)
+            boss.health_bar(window)
         for zombie in zombies:
             zombie.draw(window)
         for clown in clowns:
