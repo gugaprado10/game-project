@@ -2,6 +2,9 @@ import pygame
 import random
 import vlc
 import time
+from button import Button
+import sys
+import title_screen
 
 def main_game():
     # Variables
@@ -50,6 +53,7 @@ def main_game():
     secret_music = vlc.MediaPlayer('assets/music_sound_effects/secret music.mp3')
     boss_hit = pygame.mixer.Sound('assets/music_sound_effects/boss hit.wav')
     victory_fanfare = vlc.MediaPlayer('assets/music_sound_effects/victory fanfare.mp3')
+    game_over_music = vlc.MediaPlayer('assets/music_sound_effects/game over.mp3')
 
     class Player(object):
         def __init__(self, x, y):
@@ -196,13 +200,82 @@ def main_game():
 
         def shoot(self):
                 fireball = Projectile(self.rect.x,
-                                random.randrange(215, 490), 100, 50, fireball_sprite, -5)
+                                random.randrange(200, 490), 100, 50, fireball_sprite, -5)
                 fireballs.append(fireball)
         
         def shoot2(self):
             fireball2 = Projectile(self.rect.x,
                                 random.randrange(200, 490), 100, 50, fireball2_sprite, -5)
             big_fireballs.append(fireball2)
+
+    def congrats_screen():
+        while True:
+            window.fill("black")
+            MOUSE_POS = pygame.mouse.get_pos()
+            CONGRATS_BACK = Button(image=pygame.image.load("menu_assets/Rect.png"), pos=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+180),
+                              text_input="MAIN MENU", font=level2_font, base_color="White", hovering_color="#1dd200")
+            CONGRATS_BACK.changeColor(MOUSE_POS)
+            CONGRATS_BACK.update(window)
+            text1 = level2_font.render('Congratulations!', 1, (0, 255, 0))
+            text2 = congrats_font.render('You have defeated Sephiroth and', 1, (255, 255, 255))
+            text3 = congrats_font.render('restored peace to the world.', 1, (255, 255, 255))
+            text1_rect = text1.get_rect()
+            text2_rect = text2.get_rect()
+            text3_rect = text3.get_rect()
+            window.blit(text1, (500 -
+                        text1_rect.width//2, SCREEN_HEIGHT//8 -
+                        text1_rect.height//2))
+            window.blit(text2, (SCREEN_WIDTH//2 -
+                        text2_rect.width//2, 200 -
+                        text2_rect.height//2))
+            window.blit(text3, (SCREEN_WIDTH//2 -
+                        text3_rect.width//2, 250 -
+                        text3_rect.height//2))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if CONGRATS_BACK.checkForInput(MOUSE_POS):
+                        victory_fanfare.stop()
+                        pygame.mixer.Sound.play(title_screen.menu_back)
+                        title_screen.main_menu()
+                    
+                        
+            pygame.display.update()
+
+    def game_over_screen():
+        while True:
+            window.fill("black")
+            MOUSE_POS2 = pygame.mouse.get_pos()
+            RETRY = Button(image=pygame.image.load("menu_assets/Rect.png"), pos=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+180),
+                                text_input="MAIN MENU", font=level2_font, base_color="White", hovering_color="#1dd200")
+            RETRY.changeColor(MOUSE_POS2)
+            RETRY.update(window)
+            for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if RETRY.checkForInput(MOUSE_POS2):
+                            pygame.mixer.Sound.play(title_screen.menu_back)
+                            game_over_music.stop()
+                            title_screen.main_menu()
+
+            go_text1 = level2_font.render('Game Over', 1, (255, 0, 0))
+            go_text2 = level_font.render('Score: ' + str(score), 1, (255, 255, 255))
+            go_text1_rect = go_text1.get_rect()
+            go_text2_rect = go_text2.get_rect()
+            window.blit(go_text1, (500 -
+                        go_text1_rect.width//2, SCREEN_HEIGHT//8 -
+                        go_text1_rect.height//2))
+            window.blit(go_text2, (SCREEN_WIDTH//2 -
+                        go_text2_rect.width//2, 250 -
+                        go_text2_rect.height//2))
+            
+            pygame.display.update()
+
+
 
     def draw_lives(window):
         for i in range(1, player_health+1):
@@ -247,6 +320,7 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
+    congrats_font = pygame.font.Font('assets/font.ttf', 25)
     level = 1 
     secret = False
     boss_special = False
@@ -267,9 +341,9 @@ def main_game():
                 if event.key == pygame.K_SPACE:
                     player.shoot()
                     pygame.mixer.Sound.play(shoot_effect)
-                if event.key == pygame.K_LSHIFT and score > 100 and level == 2:
-                    secret = True 
- 
+                if event.key == pygame.K_LSHIFT and score > 1500 and level == 2:
+                    secret = True
+
         while len(zombies) < MAX_ZOMBIES:
             zombie = Enemy(zombie_sprite)
             zombies.append(zombie)
@@ -286,20 +360,20 @@ def main_game():
                 clown.spawn()
                 pygame.mixer.Sound.play(damage_sound)
 
-        if level == 1 and score >= 100 and score < 250:
+        if level == 1 and score >= 0 and score < 200:
             MAX_ZOMBIES = 5
-        if level == 1 and score >= 250 and score < 500:
+        if level == 1 and score >= 200 and score < 400:
             MAX_ZOMBIES = 7
-        if level == 1 and score >= 500:
+        if level == 1 and score >= 400:
             MAX_ZOMBIES = 10
 
-        if level == 2 and score >= 500 and score < 700:
+        if level == 2 and score >= 500 and score < 860:
             MAX_CLOWNS = 6
 
-        if level == 2 and score >= 700 and score < 900:
+        if level == 2 and score >= 860 and score < 1500:
             MAX_CLOWNS = 8
 
-        if level == 2 and score >= 1000:
+        if level == 2 and score >= 1200:
             MAX_CLOWNS = 10
 
         while len(clowns) < MAX_CLOWNS:
@@ -325,9 +399,8 @@ def main_game():
                             zombies.remove(enemy)
                             score += 10
                         else:
-                            if len(clowns)>0:
-                                clowns.remove(enemy)
-                                score += 20
+                            clowns.remove(enemy)
+                            score += 20
                         bullets.remove(bullet)
                 for knife in knives:
                     if knife.rect.colliderect(player.rect()):
@@ -344,7 +417,7 @@ def main_game():
                     bullets.remove(bullet)
                     boss.health-=1
                     pygame.mixer.Sound.play(boss_hit)
-                    pygame.mixer.Sound.set_volume(boss_hit, 0.4)
+                    pygame.mixer.Sound.set_volume(boss_hit, 0.3)
                     if boss.health <= 0:
                         secret_music.stop()
                         victory_fanfare.play()
@@ -369,28 +442,10 @@ def main_game():
                 for fireball in fireballs:
                     if fireball.rect.colliderect(fireball2):
                         fireballs.remove(fireball)
-            
-            #Alternative 1: 
-    
-            # if boss.health>50:
-            #     while len(fireballs)<2:
-            #         boss.shoot()
-            # if boss.health <= 50:
-            #     while len(fireballs)<3:
-            #         boss.shoot()
-            # if boss.health == 25:
-            #     if boss_special == False:
-            #         boss.shoot2()
-            #         boss_special = True
-            # if boss.health == 10:
-            #     if boss_special == True:
-            #         boss.shoot2()
-            #         boss_special = False
-
-            # Alternative 2:
+                        
 
             if boss.health > 50:
-                if random.randrange(0, 120) <= 2 and len(fireballs)<=MAX_FIREBALLS:
+                if random.randrange(0, 120) <= 2 and len(fireballs)<MAX_FIREBALLS:
                     boss.shoot()
             if boss.health <= 50:
                 MAX_FIREBALLS = 8 
@@ -405,16 +460,20 @@ def main_game():
             if boss.health == 10:
                 if boss_special == True:
                     boss.shoot2()
-                    boss_special = False    
+                    boss_special = False
 
+            if boss.health==0:
+                boss.health-=1
+                congrats_screen()   
 
         if player_health <= 0: 
-            run = False
             song.stop()
             secret_music.stop()
+            game_over_music.play()
+            game_over_screen()
 
         # Change levels
-        if score >= 50 and level == 1:
+        if score >= 500 and level == 1:
             level = 2
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background2.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -443,6 +502,7 @@ def main_game():
             time.sleep(5)
 
         if secret == True and level == 2:
+            boss = Boss(boss_sprite)  
             level = 3
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -471,7 +531,7 @@ def main_game():
             clowns.clear()
             enemies.clear()
             player_health = 5
-            boss = Boss(boss_sprite)        
+                 
             
 
 

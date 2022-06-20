@@ -3,7 +3,7 @@ import pygame
 import sys
 from button import Button
 import textwrap
-from game import main_game
+import game
 
 pygame.init()
 pygame.mixer.init()
@@ -28,7 +28,7 @@ def get_font(size):
 
 
 def play():
-    main_game()
+    game.main_game()
 
 
 def credits():
