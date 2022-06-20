@@ -1,14 +1,9 @@
 import pygame
-import os
 import random
 import vlc
-<<<<<<< Updated upstream
-import sched, time
-=======
 import time
 from button import Button
 import sys
->>>>>>> Stashed changes
 
 def main_game():
     # Variables
@@ -290,14 +285,9 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
-<<<<<<< Updated upstream
-    level = 1
-    secret = False
-=======
     congrats_font = pygame.font.Font('assets/font.ttf', 25)
     level = 2 
     secret = True
->>>>>>> Stashed changes
     boss_special = False
     
     run = True
