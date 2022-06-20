@@ -2,7 +2,13 @@ import pygame
 import os
 import random
 import vlc
+<<<<<<< Updated upstream
 import sched, time
+=======
+import time
+from button import Button
+import sys
+>>>>>>> Stashed changes
 
 def main_game():
     # Variables
@@ -186,7 +192,7 @@ def main_game():
         def __init__(self, sprite):
             self.sprite = sprite
             self.rect = sprite.get_rect(topleft=(620,180))
-            self.health = 100 
+            self.health = 5 
 
         def draw(self, window):
             window.blit(self.sprite, self.rect)
@@ -204,6 +210,42 @@ def main_game():
             fireball2 = Projectile(self.rect.x,
                                 random.randrange(200, 490), 100, 50, fireball2_sprite, -5)
             big_fireballs.append(fireball2)
+
+    def congrats_screen():
+        while True:
+            window.fill("black")
+            MOUSE_POS = pygame.mouse.get_pos()
+            CONGRATS_BACK = Button(image=pygame.image.load("menu_assets/Rect.png"), pos=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+180),
+                              text_input="MAIN MENU", font=level2_font, base_color="White", hovering_color="#1dd200")
+            CONGRATS_BACK.changeColor(MOUSE_POS)
+            CONGRATS_BACK.update(window)
+            text1 = level2_font.render('Congratulations!', 1, (0, 255, 0))
+            text2 = congrats_font.render('You have defeated Sephiroth and', 1, (255, 255, 255))
+            text3 = congrats_font.render('restored peace to the world.', 1, (255, 255, 255))
+            text1_rect = text1.get_rect()
+            text2_rect = text2.get_rect()
+            text3_rect = text3.get_rect()
+            window.blit(text1, (500 -
+                        text1_rect.width//2, SCREEN_HEIGHT//8 -
+                        text1_rect.height//2))
+            window.blit(text2, (SCREEN_WIDTH//2 -
+                        text2_rect.width//2, 200 -
+                        text2_rect.height//2))
+            window.blit(text3, (SCREEN_WIDTH//2 -
+                        text3_rect.width//2, 250 -
+                        text3_rect.height//2))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if CONGRATS_BACK.checkForInput(MOUSE_POS):
+                        victory_fanfare.stop()
+                        global run
+                        run = False
+                        
+            pygame.display.update()
+
 
     def draw_lives(window):
         for i in range(1, player_health+1):
@@ -248,8 +290,14 @@ def main_game():
     font = pygame.font.Font('assets/font.ttf', 30)
     level_font = pygame.font.Font('assets/font.ttf', 60)
     level2_font = pygame.font.Font('assets/font.ttf', 45)
+<<<<<<< Updated upstream
     level = 1
     secret = False
+=======
+    congrats_font = pygame.font.Font('assets/font.ttf', 25)
+    level = 2 
+    secret = True
+>>>>>>> Stashed changes
     boss_special = False
     
     run = True
@@ -405,8 +453,11 @@ def main_game():
             if boss.health == 10:
                 if boss_special == True:
                     boss.shoot2()
-                    boss_special = False    
+                    boss_special = False
 
+            if boss.health==0:
+                boss.health-=1
+                congrats_screen()   
 
         if player_health <= 0: 
             run = False
@@ -443,6 +494,7 @@ def main_game():
             time.sleep(5)
 
         if secret == True and level == 2:
+            boss = Boss(boss_sprite)  
             level = 3
             background = pygame.transform.scale(pygame.image.load(
                 'assets/background.png'), (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -471,7 +523,7 @@ def main_game():
             clowns.clear()
             enemies.clear()
             player_health = 5
-            boss = Boss(boss_sprite)        
+                 
             
 
 
