@@ -85,7 +85,7 @@ def main_game():
                 window.blit(shooting_frames[self.shoot_count//3], (self.x, self.y))
                 self.shoot_count += 1
 
-            self.move(level)v
+            self.move(level)
 
         def move(self, level):
             keys = pygame.key.get_pressed()
