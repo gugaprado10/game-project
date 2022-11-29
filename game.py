@@ -406,9 +406,9 @@ def main_game():
                     if knife.rect.colliderect(player.rect()):
                         pygame.mixer.Sound.play(damage_sound)
                         player_health -= 1
-                        if len(knives) > 0:
+                        if knife in knives:
                             knives.remove(knife)
-                    if knife.x <= 0 and len(knives)>0:
+                    if knife.x <= 0 and knife in knives:
                         knives.remove(knife)
 
         if level == 3:
@@ -426,7 +426,7 @@ def main_game():
                 if fireball.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
                     player_health -= 1
-                    if len(fireballs) > 0:
+                    if fireball in fireballs:
                         fireballs.remove(fireball)
                 if fireball.x <= 0 and len(fireballs)>0:
                     fireballs.remove(fireball)
@@ -435,7 +435,7 @@ def main_game():
                 if fireball2.rect.colliderect(player.rect()):
                     pygame.mixer.Sound.play(damage_sound)
                     player_health -= 1
-                    if len(big_fireballs) > 0:
+                    if fireball2 in big_fireballs:
                         big_fireballs.remove(fireball2)
                 if fireball2.x + 123 <= 0 and len(fireballs)>0:
                     big_fireballs.remove(fireball2)
