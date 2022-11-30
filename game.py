@@ -279,14 +279,14 @@ def main_game():
 
     def draw_lives(window):
         for i in range(1, player_health+1):
-            window.blit(heart_sprite, (SCREEN_WIDTH - i*(heart_size+5), 10))
+            window.blit(heart_sprite, ((i*(heart_size+5)-20), 10))
 
 
     def redraw_window():
         window.blit(background, (0, 0))
         draw_lives(window)
-        score_text = font.render('Score: ' + str(score), 1, (0, 255, 0))
-        window.blit(score_text, (20, 10))
+        score_text = font.render(f"{'Score:':<3}{score:>4}" , 1, (0, 255, 0))
+        window.blit(score_text, (650, 12))
 
         player.draw(window)
         if level == 3:
