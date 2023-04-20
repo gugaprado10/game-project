@@ -37,7 +37,7 @@ def credits():
 
         SCREEN.fill("black")
 
-        font = pygame.font.Font("menu_assets/pixel.ttf", 45, bold=True)
+        font = pygame.font.Font("menu_assets/pixel.ttf", 45)
         your_text = "A gruesome zombie apocalypse broke out yesterday. The world you once knew is gone. The bustling streets are now quiet, except for the occasional cry for help. You are face to face with terrifying creatures - zombies and (sneaky) clowns, which are eager to drink your blood and eat your brain. Keep your eyes open and don't let your weapon out of your hands. Good luck!"
         txtX, txtY = 125, 70
         wraplen = 50

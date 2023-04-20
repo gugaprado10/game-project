@@ -21,7 +21,7 @@ def main_game():
     pygame.init()
     pygame.mixer.init()
     window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Zombie Shooter")
+    pygame.display.set_caption("Apocalypse Yesterday")
     clock = pygame.time.Clock()
 
     # Assets
@@ -285,8 +285,8 @@ def main_game():
     def redraw_window():
         window.blit(background, (0, 0))
         draw_lives(window)
-        score_text = font.render(f"{'Score:':<3}{score:>4}" , 1, (0, 255, 0))
-        window.blit(score_text, (650, 12))
+        score_text = font.render(f"{'Score:':<3}{score:>5}" , 1, (0, 255, 0))
+        window.blit(score_text, (625, 12))
 
         player.draw(window)
         if level == 3:
